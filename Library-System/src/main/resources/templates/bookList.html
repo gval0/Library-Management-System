@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Book List</title>
+</head>
+<body>
+<h1>Book List</h1>
+<ul>
+  <li th:each="book : ${bookList}">
+    <a th:href="@{'/books/bookProfile/' + ${book.id}}">
+      <span th:text="${book.title}"></span>
+    </a>
+    by <span th:text="${book.author}"></span>
+  </li>
+</ul>
+
+<script>
+  // Retrieve the book list from the server using AJAX
+  function fetchBookList() {
+    fetch('/books')
+            .then(response => response.json())
+            .then(data => {
+              const bookList = document.getElementById('book-list');
+
+              data.forEach(book => {
+                const listItem = document.createElement('li');
+                const link = document.createElement('a');
+                link.href = `/book/bookProfile/${book.id}`;
+                link.textContent = book.title;
+                listItem.appendChild(link);
+                bookList.appendChild(listItem);
+              });
+            })
+            .catch(error => {
+              console.error('Error fetching book list:', error);
+            });
+  }
+
+  window.onload = fetchBookList;
+</script>
+</body>
+</html>

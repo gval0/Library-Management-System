@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Registration</title>
+<!--    <link rel="stylesheet" type="text/css" href="/RegistrationStyle.css">-->
+
+</head>
+<body>
+<div class="container">
+    <h1>Registration Page</h1>
+    <form id="registrationForm" method="post">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+
+        <div class="form-group">
+            <label for="role">Role:</label>
+            <select id="role" name="role" required>
+                <option value="LIBRARIAN">Librarian</option>
+                <option value="PATRON">Patron</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn">Register</button>
+        </div>
+    </form>
+</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+                const registrationForm = document.getElementById("registrationForm");
+
+            registrationForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const username = document.getElementById("username").value;
+                const password = document.getElementById("password").value;
+                const role = document.getElementById("role").value;
+
+                if (!username || !password) {
+                    alert("Please fill in all required fields.");
+                } else {
+                    const formData = new FormData();
+                    formData.append('username', username);
+                    formData.append('password', password);
+                    formData.append('role', role);
+
+                    fetch('/registration', {
+                        method: 'POST',
+                        body: formData
+                    })
+                        .then(response => {
+                            if (response.status === 200) {
+                                window.location.href = '/login';
+                            } else if (response.status === 401) {
+                                response.text().then(errorMessage => {
+                                    console.error('Registration failed:', errorMessage);
+                                    alert(errorMessage);
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error during registration:', error);
+                        });
+                }
+            });
+        });
+
+    </script>
+
+</body>
+</html>

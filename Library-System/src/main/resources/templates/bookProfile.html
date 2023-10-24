@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Book Profile</title>
+</head>
+<body>
+<h1>Book Profile</h1>
+<div th:if="${book != null}">
+    <p><strong>Title:</strong> <span th:text="${book.getTitle()}"></span></p>
+    <p><strong>Author:</strong> <span th:text="${book.getAuthor()}"></span></p>
+    <p><strong>ISBN:</strong> <span th:text="${book.getISBN()}"></span></p>
+    <p><strong>Genre:</strong> <span th:text="${book.getGenre()}"></span></p>
+    <p><strong>Is Available:</strong> <span th:text="${book.getIsAvailable()} ? 'Yes' : 'No'"></span></p>
+    <button class="delete-button" th:data-id="${book.getId()}">Delete</button>
+    <a th:href="@{'/bookProfile/edit/' + ${book.getId()}}">Edit</a>
+</div>
+
+<script>
+
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('delete-button')) {
+            const id = event.target.dataset.id;
+            deleteBook(id);
+        }
+    });
+    function deleteBook(bookId) {
+        console.log(bookId)
+        if (confirm("Are you sure you want to delete this book?")) {
+            fetch('/books/delete/' + bookId, {
+                method: 'DELETE'
+            })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = '/books';
+                    } else {
+                        console.log("not supose to be here")
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting book:', error);
+                });
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Patron List</title>
+</head>
+<body>
+<h1>Patron List</h1>
+<ul>
+  <li th:each="patron : ${patronList}">
+    <a th:href="@{'/patron/patronProfile/' + ${patron.getId()}}">
+      <span th:text="${patron.getName()}"></span> Id:<span th:text="${patron.getId()}"></span>
+    </a>
+
+  </li>
+</ul>
+
+<script>
+  // Retrieve the book list from the server using AJAX
+  function fetchBookList() {
+    fetch('/patron/list')
+            .then(response => response.json())
+            .then(data => {
+              const patronList = document.getElementById('patron-list');
+
+              data.forEach(patron => {
+                const listItem = document.createElement('li');
+                const link = document.createElement('a');
+                link.href = `/patron/patronProfile/${patron.id}`;
+                link.textContent = patron.title;
+                listItem.appendChild(link);
+                patronList.appendChild(listItem);
+              });
+            })
+            .catch(error => {
+              console.error('Error fetching patron list:', error);
+            });
+  }
+
+  window.onload = fetchBookList;
+</script>
+</body>
+</html>

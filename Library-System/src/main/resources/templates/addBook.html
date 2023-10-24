@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Book Registration</title>
+</head>
+<body>
+
+<h1>Book Registration</h1>
+<form id="bookRegistrationForm">
+  <label for="title">Title:</label>
+  <input type="text" id="title" required><br>
+
+  <label for="author">Author:</label>
+  <input type="text" id="author" required><br>
+
+  <label for="isbn">ISBN:</label>
+  <input type="text" id="isbn" required><br>
+
+  <label for="genre">Genre:</label>
+  <input type="text" id="genre" required><br>
+
+  <div class="form-group">
+    <label for="availability">Availability:</label>
+    <select id="availability" required>
+      <option value="Yes">Yes</option>
+      <option value="No">No</option>
+    </select>
+  </div>
+
+  <button type="submit" id="addBookButton">Add Book</button>
+</form>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const registrationForm = document.getElementById("bookRegistrationForm");
+
+    registrationForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+      const title = document.getElementById("title").value;
+      const author = document.getElementById("author").value;
+      const isbn = document.getElementById("isbn").value;
+      const genre = document.getElementById("genre").value;
+      const availability = document.getElementById("availability").value;
+      if (!title || !author || !isbn || !genre || !availability) {
+        alert("Please fill in all fields.");
+      } else {
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('author', author);
+        formData.append('ISBN', isbn);
+        formData.append('genre', genre);
+        formData.append('isAvailable', availability);
+
+        fetch('/book-register', {
+          method: 'POST',
+          body: formData
+        })
+                .then(response => {
+                  if (response.status === 200) {
+                    window.location.href = '/books';
+                  } else if (response.status === 401) {
+                    response.text().then(errorMessage => {
+                      console.error('Registration failed:', errorMessage);
+                      alert(errorMessage);
+                    });
+                  }
+                })
+                .catch(error => {
+                  console.error('Error during registration:', error);
+                });
+      }
+    });
+  });
+</script>
+</body>
+</html>
