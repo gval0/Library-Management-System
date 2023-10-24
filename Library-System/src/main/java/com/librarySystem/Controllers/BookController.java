@@ -30,7 +30,7 @@ public class BookController {
         return book.orElse(null);
     }
 
-    @PutMapping("/bookProfile/edit/{id}")
+    @PutMapping("/librarian/bookProfile/edit/{id}")
     public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody Book updatedBook) {
         Book book = bookService.updateBookInfo(id, updatedBook);
         if (book == null){
@@ -40,7 +40,7 @@ public class BookController {
     }
 
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/librarian/delete/{id}")
     public ResponseEntity<String> deleteBook(@PathVariable Long id) {
         boolean deleted = bookService.deleteBookById(id);
         System.out.println(deleted);

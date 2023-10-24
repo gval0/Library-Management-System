@@ -31,9 +31,6 @@ public class RegistrationController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Username is already registered. Please choose a different username.");
         }
         userService.saveUser(user);
-        if (user.getRole().equals("PATRON")){
-            patronService.savePatron(null, user);
-        }
         return ResponseEntity.ok("Registration successful. You can now log in.");
     }
 }

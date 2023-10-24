@@ -33,7 +33,7 @@ public class BookBorrowingController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("book can't be borrowed");
     }
 
-    @PostMapping("/return")
+    @PostMapping("/librarian/return")
     public ResponseEntity<String> returnBook(@RequestBody Long bookId){
         if (transService.returnBookById(bookId) && bookService.makeBookAvailable(bookId)){
             return ResponseEntity.ok("done");

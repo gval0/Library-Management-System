@@ -20,7 +20,7 @@ public class PatronController {
     @Autowired
     private PatronService patronService;
 
-    @GetMapping("/list")
+    @GetMapping("/librarian/list")
     public List<Patron> showPatronList() {
         return patronService.findAllPatron();
     }
